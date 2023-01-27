@@ -52,6 +52,7 @@ class Trainer:
     def train_step(self, x, y):
         # perform following steps:
         # -reset the gradients. By default, PyTorch accumulates (sums up) gradients when backward() is called. This behavior is not required here, so you need to ensure that all the gradients are zero before calling the backward.
+
         # -propagate through the network
         # -calculate the loss
         # -compute gradient by backward propagation
