@@ -9,24 +9,26 @@ from sklearn.model_selection import train_test_split
 
 
 # load the data from the csv file and perform a train-test-split
+data = pd.read_csv("data.csv",sep=';')
+train,val = train_test_split(data,test_size=0.2)
 # this can be accomplished using the already imported pandas and sklearn.model_selection modules
-# TODO
-
 # set up data loading for the training and validation set each using t.utils.data.DataLoader and ChallengeDataset objects
-# TODO
+Train_data= ChallengeDataset(train,mode="train")
+Val_data= ChallengeDataset(val,mode="val")
+
 
 # create an instance of our ResNet model
-# TODO
-
+model = model.ResNet()
 # set up a suitable loss criterion (you can find a pre-implemented loss functions in t.nn)
+loss = t.nn.BCEWithLogitsLoss()
 # set up the optimizer (see t.optim)
+optimizer = t.optim.Adam(model.parameters(), lr=0.005)
 # create an object of type Trainer and set its early stopping criterion
-# TODO
-
+trainer = Trainer(model,loss,optimizer,Train_data,Val_data,3)
+#
+print(t.cuda.is_available())
 # go, go, go... call fit on trainer
-res =
-#TODO
-pass
+res = trainer.fit(5)
 
 # plot the results
 plt.plot(np.arange(len(res[0])), res[0], label='train loss')

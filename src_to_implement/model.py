@@ -14,10 +14,7 @@ class ResBlock(nn.Module):
 
     def forward(self, input):
         shortcut = self.shortcut(input)
-        #shortcut=shortcut.squeeze(0)
-        #print(shortcut.shape)
         shortcut = self.conv_input(shortcut)
-        #shortcut=shortcut.squeeze(0)
         input = nn.ReLU()(self.bn1(self.conv1(input)))
         input = (self.bn2(self.conv2(input)))
         # get dimensions of the output (+ heigth and width of image as stride) kernal size size one

@@ -48,7 +48,6 @@ class TestDataset(unittest.TestCase):
 
     def test_shape(self):
         from data import ChallengeDataset
-        print('lol')
         val_dl = t.utils.data.DataLoader(ChallengeDataset(self.tab, 'val'), batch_size=1)
         for x, y in val_dl:
             x = x[0].cpu().numpy()
