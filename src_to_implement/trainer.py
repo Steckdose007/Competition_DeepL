@@ -58,8 +58,8 @@ class Trainer:
         # -update weights
         # -return the loss
         # Forward pass
-        outputs = self._model(t.unsqueeze(x,0))
-        loss = self._crit(outputs, t.unsqueeze(y,0).float())
+        outputs = self._model(x)
+        loss = self._crit(outputs, y)
 
         # Backward and optimize
         self._optim.zero_grad()
@@ -90,7 +90,7 @@ class Trainer:
             # Move tensors to the configured device
             images = images.cuda()
             labels = labels.cuda()
-            losses += self.train_step(images, labels)
+            losses += self.train_step(images, labels.float())
         losses = losses / i
         return losses
 
@@ -105,25 +105,28 @@ class Trainer:
              # iterate through the validation set
             for i, (images, labels) in enumerate(self._val_test_dl):
                 # transfer the batch to the gpu if given
-                images = t.unsqueeze(images,0)
-                labels = t.unsqueeze(labels,0).float()
+
                 images = images.cuda()
                 labels = labels.cuda()
         # perform a validation step
-                loss, pred = self.val_test_step(images, labels)
-                """print(pred[0])
-                print(pred)
-                print(pred[0,0])"""
+                loss, pred = self.val_test_step(images, labels.float())
+                # print(pred[0])
+                # print(pred)
+                # print(pred[0,0])
         # save the predictions and the labels for each batch
                 losses += loss
         # calculate the average loss and average metrics of your choice. You might want to calculate these metrics in designated functions
-                score = f1_score(labels.cpu(), pred.cpu(), average=None)
+                #print("before:",pred)
+                pred = (pred>0.5).float()
+                #print("after:", pred)
+                #print("label",labels)
+                #score = f1_score(labels.cpu(), pred.cpu(), average=None)
                 del images, labels, pred
             losses = losses / i
         # return the loss and print the calculated metrics
-            print("Class 1 score:", score[0])
-            print("Class 2 score:", score[1])
-            print("Average score:", (score[0] + score[1]) / 2)
+            #print("Class 1 score:", score[0])
+            #print("Class 2 score:", score[1])
+            #print("Average score:", (score[0] + score[1]) / 2)
             return losses
 
     def fit(self, epochs=-1):
